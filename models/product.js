@@ -1,6 +1,14 @@
 const mongoose = require("mongoose");
 
 const product = mongoose.model("Product", {
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review"
+    }
+  ],
+  averageRating: { type: Number, min: 0, max: 5 },
+
   title: {
     type: String,
     default: ""

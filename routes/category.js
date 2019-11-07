@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const Category = require("../models/category");
+const Product = require("../models/product");
+
 router.post("/create", async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;
@@ -37,8 +39,8 @@ router.post("/create", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const categorys = await Category.find();
-    res.json(categorys);
+    const categories = await Category.find();
+    res.json(categories);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -66,10 +68,11 @@ router.put("/update", async (req, res) => {
 });
 
 router.delete("/delete", async (req, res) => {
-  const id = req.body.id;
+  const id = req.query.id;
   try {
     // On supprime le medoc qui a pour id `id`
     await Category.findByIdAndRemove(id);
+    const products = await Product.findOne({ category: id });
     res.send(" category est bien supprimer");
   } catch (error) {
     res.status(400).send({ error: error.message });
